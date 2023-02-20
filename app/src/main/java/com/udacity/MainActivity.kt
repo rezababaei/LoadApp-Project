@@ -13,8 +13,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.util.Log
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -79,19 +77,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        createChannelWithPermission(this)
+        requestPermissionToSendNotification(this)
 
 
     }
 
 
-    private fun createChannelWithPermission(context: Activity) {
+    private fun requestPermissionToSendNotification(context: Activity): Boolean {
         // Check if the Camera permission has been granted
         if ((ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) ==
                     PackageManager.PERMISSION_GRANTED)
         ) {
             // Permission is already available, start camera preview
 //            createChannelWithIdAndName()
+            return true
 
         } else {
             // Permission is missing and must be requested.
@@ -99,8 +98,10 @@ class MainActivity : AppCompatActivity() {
                 requestPermission(context,
                     Manifest.permission.POST_NOTIFICATIONS,
                     PERMISSION_POST_NOTIFICATIONS)
+                return false
             }
         }
+        return true
     }
 
 
@@ -176,25 +177,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun createChannel(channelId: String, channelName: String) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(
-                channelId,
-                channelName,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-                // TODO: Step 2.6 disable badges for this channel
-                .apply {
-                    setShowBadge(false)
-                }
-            notificationChannel.enableLights(true)
-            notificationChannel.lightColor = Color.RED
-            notificationChannel.enableVibration(true)
-            notificationChannel.description = "Downloaded Files"
+        if (requestPermissionToSendNotification(this))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notificationChannel = NotificationChannel(
+                    channelId,
+                    channelName,
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+                    // TODO: Step 2.6 disable badges for this channel
+                    .apply {
+                        setShowBadge(false)
+                    }
+                notificationChannel.enableLights(true)
+                notificationChannel.lightColor = Color.RED
+                notificationChannel.enableVibration(true)
+                notificationChannel.description = "Downloaded Files"
 
-            notificationManager = ContextCompat.getSystemService(applicationContext,
-                NotificationManager::class.java) as NotificationManager
-            notificationManager.createNotificationChannel(notificationChannel)
-        }
+                notificationManager = ContextCompat.getSystemService(applicationContext,
+                    NotificationManager::class.java) as NotificationManager
+                notificationManager.createNotificationChannel(notificationChannel)
+            }
 
     }
 
