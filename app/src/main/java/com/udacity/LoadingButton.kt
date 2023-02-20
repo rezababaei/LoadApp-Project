@@ -62,6 +62,7 @@ class LoadingButton @JvmOverloads constructor(
                 val percentage = animatedValue as Float
                 progressPercentage = percentage
                 repeatMode = ValueAnimator.REVERSE
+                repeatCount=0
                 invalidate()
             }
             doOnEnd {
