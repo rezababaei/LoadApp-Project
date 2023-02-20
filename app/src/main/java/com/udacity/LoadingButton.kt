@@ -1,6 +1,5 @@
 package com.udacity
 
-import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
@@ -33,7 +32,6 @@ class LoadingButton @JvmOverloads constructor(
     }
 
 
-    //     var downloadState =DownloadState.START         // The active selection.
     // position variable which will be used to draw label and indicator circle position
     private val pointPosition: PointF = PointF(0.0f, 0.0f)
     var buttonState: ButtonState by Delegates.observable(ButtonState.Completed) { _, _, new ->
@@ -47,31 +45,47 @@ class LoadingButton @JvmOverloads constructor(
                 animateProgress()
             }
             ButtonState.Completed -> {
-                valueAnimator.cancel()
-                progressPercentage = 0f
-                buttonText = resources.getString(R.string.download)
-                invalidate()
+                speedUpProgress()
             }
         }
     }
 
-    private fun animateProgress(duration: Long = 3000, currentPercentage: Float = 0f) {
+
+
+    private fun animateProgress(
+        duration: Long = 3000,
+        currentPercentage: Float = 0f,
+    ) {
         valueAnimator = ValueAnimator.ofFloat(currentPercentage, 100f).apply {
             this.duration = duration
             addUpdateListener {
                 val percentage = animatedValue as Float
                 progressPercentage = percentage
+                repeatMode = ValueAnimator.REVERSE
                 invalidate()
             }
-
             doOnEnd {
-                buttonState = ButtonState.Completed
+                if (buttonState != ButtonState.Loading) {
+                    endProgress()
+                } else {
+                    reverse()
+                }
             }
-
         }
         valueAnimator.start()
     }
 
+    private fun speedUpProgress() {
+        valueAnimator.removeAllListeners()
+        valueAnimator.cancel()
+        animateProgress(duration = 500, currentPercentage = progressPercentage)
+    }
+
+    private fun endProgress() {
+        progressPercentage = 0f
+        buttonText = resources.getString(R.string.download)
+        invalidate()
+    }
 
     private var buttonProgressColor = 0
     private var buttonCircleColor = 0
@@ -95,10 +109,10 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+
         drawRectProgress(canvas)
         drawCircleProgress(canvas)
         drawText(canvas)
-
     }
 
     private fun drawCircleProgress(canvas: Canvas) {
