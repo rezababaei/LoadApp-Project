@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">Download Manager</string>
+    <string name="app_description">Download files from Internet</string>
+    <string name="action_settings">Settings</string>
+
+
+    <string name="notification_title">Udacity: Android Kotlin Nanodegree </string>
+    <string name="notification_description">The Project 3 repository is downloaded</string>
+    <string name="notification_button">See changes</string>
+
+    <string name="button_name">Click me</string>
+    <string name="button_loading">We are loading </string>
+    <string name="title_activity_detail">DetailActivity</string>
+
+    <string name="glide_image_loading">Glide - Image Loading Library By Bump Tech</string>
+    <string name="loadapp_current_repository">LoadApp - Current repository by Udacity</string>
+    <string name="retrofit_type_safe">Retrofit - Type-safe HTTP client for Android and Java By Square, Inc</string>
+
+    <string name="download">Download</string>
+    <string name="please_select_file">Please Select the file to download</string>
+
+
+    <string name="load_app_channel_id" translatable="false">load_app_channel</string>
+    <string name="load_app_channel_name" translatable="true">LoadApp</string>
+    <string name="file_name">File Name:</string>
+    <string name="status">Status:</string>
+    <string name="ok">Ok</string>
+    <string name="error_downloading">There is a Problem with Internet</string>
+</resources>
